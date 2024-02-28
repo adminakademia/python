@@ -1,0 +1,12 @@
+R1:
+    hostname:  192.168.122.254
+    groups:
+        - cisco
+S1:
+    hostname: 192.168.122.250
+    groups:
+        - cisco
+S2:
+    hostname: 192.168.122.251
+    groups:
+        - cisco
