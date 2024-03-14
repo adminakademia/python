@@ -1,0 +1,5 @@
+<nav>
+    {% for menu_pozycje in ["start", "wyniki"] %}
+      <a href="{{ url_for(menu_pozycje) }}">{{ menu_pozycje }}</a>
+    {% endfor %}
+</nav>
