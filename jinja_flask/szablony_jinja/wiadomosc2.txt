@@ -1,0 +1,11 @@
+Witaj {{ imie_nazwisko }}!
+
+{% if wynik > 70 %}
+Miło mi poinformować, że zadanie "{{ nazwa_zadania }}" zostało zaliczone wynikiem pozytywnym.
+{% else %}
+Przykro mi poinformować, że zadanie "{{ nazwa_zadania }}" zostało ocenione wynikiem niestety negatywnym.
+{% endif %}
+Uzyskane zostało {{ wynik }} z możliwych {{ max_punktow }} punktów.
+
+--
+Wykładowca
