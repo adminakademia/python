@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <title>Wyniki</title>
+</head>
+
+<body>
+  <h1>{{ nazwa_zadania }} - Wyniki</h1>
+  <ul>
+  {% for student in studenci %}
+    <li>
+      {% if student.wynik > 70 %}🙂{% else %}🙁{% endif %}
+      <em>{{ student.imie_nazwisko }}:</em> {{ student.wynik }}/{{ max_punktow }}
+    </li>
+  {% endfor %}
+  </ul>
+</body>
+</html>
