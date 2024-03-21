@@ -1,0 +1,6 @@
+{% for interface in interface_list %}
+interface {{ interface.name }}
+description {{ interface.desc|upper|reverse }}
+{% include "vlans.j2" %}
+{% endfor %}
+{% block http %}{% endblock %}
