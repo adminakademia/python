@@ -1,0 +1,17 @@
+hostname {{ nazwa_hosta_do_szablonu }}
+{% for interface in lista_interfejsow_do_szablonu %}
+interface {{ interface.name }}
+ description {{ interface.description }}
+ ip address {{ interface.ip_address }} {{ interface.subnet_mask }}
+ {% if interface.enabled -%}
+ no shutdown
+ {% else -%}
+ shutdown
+ {% endif %}
+{%- endfor -%}
+{# #}
+router ospf {{ konfiguracja_ospf.process_id }}
+ router-id {{ konfiguracja_ospf.router_id -}}
+ {% for network in konfiguracja_ospf.networks %}
+ network {{ network.network }} {{ network.wildcard_mask }} area {{ network.area }}
+ {%- endfor %}

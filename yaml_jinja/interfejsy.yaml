@@ -1,0 +1,33 @@
+---
+hostname: R1
+interfaces:
+  - name: GigabitEthernet0/0
+    description: "Internet"
+    ip_address: "192.168.1.1"
+    subnet_mask: "255.255.255.0"
+    enabled: true
+  - name: GigabitEthernet0/1
+    description: "LAN1"
+    ip_address: "192.168.2.1"
+    subnet_mask: "255.255.255.0"
+    enabled: true
+  - name: GigabitEthernet0/2
+    description: "LAN2"
+    ip_address: "192.168.3.1"
+    subnet_mask: "255.255.255.0"
+    enabled: false
+  - name: GigabitEthernet0/3
+    description: "LAN3"
+    ip_address: "192.168.4.1"
+    subnet_mask: "255.255.255.0"
+    enabled: false
+ospf:
+  process_id: 1
+  networks:
+    - network: "192.168.2.0"
+      wildcard_mask: "0.0.0.255"
+      area: 0
+    - network: "192.168.3.0"
+      wildcard_mask: "0.0.0.255"
+      area: 0
+  router_id: "1.1.1.1"
