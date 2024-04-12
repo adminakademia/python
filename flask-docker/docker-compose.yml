@@ -1,0 +1,7 @@
+services:
+  flask-docker:
+    image: flask-docker
+    volumes:
+      - /root/flask-docker:/flask-docker
+    ports:
+      - 80:5000
