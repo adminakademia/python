@@ -1,0 +1,12 @@
+{% extends 'strona.html' %}
+{% block content %}
+<div class="bg-light p-3 rounded code-block border border-primary">
+    <h1 class="text-center pt-5">Podaj nazwę rutera</h1>
+    <form method="POST">
+    <div class="mb-3">
+       <label for="lista" class="form-label">Wprowadź nazwę rutera</label>
+       <input type="text" class="form-control" id="lista" name="lista" placeholder="Nazwa">
+    </div>
+    <button type="submit" class="btn btn-primary">Zatwierdź</button>
+    </form>
+{% endblock content %}
