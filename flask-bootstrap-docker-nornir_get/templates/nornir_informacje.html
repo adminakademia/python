@@ -1,0 +1,21 @@
+{% extends 'strona.html' %}
+{% block content %}
+
+<div class="bg-light p-3 rounded code-block border border-primary">
+    <div class="container mt-3">
+        <h2>Informacje o urządzeniu {{urzadzenie}}</h2>
+        <table class="table table-striped table-bordered">
+          <tbody>
+            {% for klucz, wartosc in nornirnapalm_facts.items() %}
+              <tr>
+                <td>{{ klucz }}</td>
+                <td>{{ wartosc }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+</div>
+
+
+{% endblock content %}
