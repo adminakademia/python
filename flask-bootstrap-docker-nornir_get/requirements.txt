@@ -1,0 +1,9 @@
+flask
+jinja2
+pyyaml
+tabulate
+nornir
+nornir_napalm
+nornir_netmiko
+nornir_utils
+nornir_inspect
