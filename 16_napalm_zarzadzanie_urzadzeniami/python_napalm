@@ -1,0 +1,123 @@
+## Instalacja Napalm na ubuntu
+
+apt update
+apt install python -y
+apt install build-essential libssl-dev libffi-dev -y
+apt install python3-pip -y
+# pip install --upgrade pip
+pip install cryptography
+pip install netmiko
+# pip install --upgrade napalm
+pip install napalm
+
+#################################################################
+
+import json
+
+from napalm import get_network_driver
+driver = get_network_driver('ios')
+iosvl2 = driver('192.168.122.250', 'cisco', 'cisco')
+iosvl2.open()
+
+ios_output = iosvl2.get_facts()
+print(json.dumps(ios_output, indent=3))
+
+ios_output = iosvl2.get_interfaces()
+print (json.dumps(ios_output, indent=3))
+
+ios_output = iosvl2.get_interfaces_counters()
+print (json.dumps(ios_output, indent=3))
+
+iosvl2.close()
+
+
+#################################################################
+
+import json
+
+from napalm import get_network_driver
+driver = get_network_driver('ios')
+iosvl2 = driver('192.168.122.250', 'cisco', 'cisco')
+iosvl2.open()
+
+ios_output = iosvl2.get_mac_address_table()
+print (json.dumps(ios_output, sort_keys=True, indent=3))
+
+ios_output = iosvl2.get_arp_table()
+print (json.dumps(ios_output, sort_keys=True, indent=3))
+
+ios_output = iosvl2.ping('1.1.1.1')
+print (json.dumps(ios_output, sort_keys=True, indent=3))
+
+iosvl2.close()
+
+#################################################################
+##Tworzymy plik acl.cfg z zawartością:
+
+access-list 101 permit icmp any any
+access-list 101 permit tcp any any eq 80
+access-list 101 permit tcp any any eq 443
+access-list 101 permit tcp any any eq 53
+
+
+#### Tworzymy skrypt nap_konf1.py :
+
+
+import json
+from napalm import get_network_driver
+driver = get_network_driver('ios')
+iosvl2 = driver('192.168.122.250', 'cisco', 'cisco')
+iosvl2.open()
+
+print ('Wysylam konfiguracje do 192.168.122.250')
+iosvl2.load_merge_candidate(filename='acl.cfg')
+iosvl2.commit_config()
+iosvl2.close()
+
+
+####
+
+import json
+from napalm import get_network_driver
+driver = get_network_driver('ios')
+iosvl2 = driver('192.168.122.250', 'cisco', 'cisco')
+iosvl2.open()
+
+print ('Wysylam konfiguracje do 192.168.122.250')
+iosvl2.load_merge_candidate(filename='acl.cfg')
+
+porownanie = iosvl2.compare_config()
+if len(porownanie) > 0:
+    print(porownanie)
+    iosvl2.commit_config()
+else:
+    print('Konfiguracja juz byla, i nie wymaga wdrozenia.')
+    iosvl2.discard_config()
+
+iosvl2.close()
+
+
+
+#################################################################
+
+import json
+from napalm import get_network_driver
+
+listaurzadzen = ['192.168.122.250',
+           '192.168.122.251'
+           ]
+
+for adres_ip in listaurzadzen:
+    print ("Podlaczam sie do " + str(adres_ip))
+    driver = get_network_driver('ios')
+    iosv = driver(adres_ip, 'cisco', 'cisco')
+    iosv.open()
+    iosv.load_merge_candidate(filename='acl.cfg')
+    diffs = iosv.compare_config()
+    if len(diffs) > 0:
+        print(diffs)
+        iosv.commit_config()
+    else:
+        print('Konfiguracja juz byla, i nie wymaga wdrozenia.')
+        iosv.discard_config()
+    iosv.close()
