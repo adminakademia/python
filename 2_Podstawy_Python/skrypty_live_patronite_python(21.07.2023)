@@ -1,0 +1,162 @@
+######################### ruter1.py ######################################
+
+
+import getpass
+import telnetlib
+
+HOST = "192.168.122.254"
+user = input("Wpisz nazwe uzytkownika: ")
+password = getpass.getpass()
+
+tn = telnetlib.Telnet(HOST)
+
+tn.read_until(b"Username: ")
+tn.write(user.encode('ascii') + b"\n")
+if password:
+    tn.read_until(b"Password: ")
+    tn.write(password.encode('ascii') + b"\n")
+
+tn.write(b"sh ip int br\n")
+tn.write(b"exit\n")
+
+print(tn.read_all().decode('ascii'))
+
+
+
+
+
+#####
+
+tn.write(b"sh ip int br\n")
+tn.write(b"conf t\n")
+tn.write(b"int loop 1\n")
+tn.write(b"ip address 1.1.1.1 255.255.255.255\n")
+tn.write(b"int loop 2\n")
+tn.write(b"ip address 2.2.2.2 255.255.255.255\n")
+tn.write(b"router ospf 1\n")
+tn.write(b"network 2.2.2.2 255.255.255.255 area 0\n")
+tn.write(b"end\n")
+tn.write(b"sh ip int br\n")
+tn.write(b"exit\n")
+
+
+######################### switch1.py ######################################
+
+
+import getpass
+import telnetlib
+
+HOST = "192.168.122.250"
+user = input("Wpisz nazwe uzytkownika: ")
+password = getpass.getpass()
+
+tn = telnetlib.Telnet(HOST)
+
+tn.read_until(b"Username: ")
+tn.write(user.encode('ascii') + b"\n")
+if password:
+    tn.read_until(b"Password: ")
+    tn.write(password.encode('ascii') + b"\n")
+
+tn.write(b"sh ip int br\n")
+tn.write(b"exit\n")
+tn.write(b"conf t\n")
+tn.write(b"vlan 2\n")
+tn.write(b"name VLAN_2\n")
+tn.write(b"vlan 3\n")
+tn.write(b"name VLAN_3\n")
+tn.write(b"vlan 4\n")
+tn.write(b"name VLAN_4\n")
+tn.write(b"vlan 5\n")
+tn.write(b"name VLAN_5\n")
+tn.write(b"end\n")
+tn.write(b"show vlan brief\n")
+tn.write(b"exit\n")
+
+print(tn.read_all().decode('ascii'))
+
+
+######################### switch3.py ######################################
+
+import getpass
+import telnetlib
+
+HOST = "localhost"
+user = input("Wpisz nazwe uzytkownika: ")
+password = getpass.getpass()
+
+f = open ('switchlista')
+
+for IP in f:
+    IP=IP.strip()
+    print ("Konfiguruje przelacznik " + (IP))
+    HOST = IP
+    tn = telnetlib.Telnet(HOST)
+    tn.read_until(b"Username: ")
+    tn.write(user.encode('ascii') + b"\n")
+    if password:
+       tn.read_until(b"Password: ")
+       tn.write(password.encode('ascii') + b"\n")
+tn.write(b"conf t\n")
+tn.write(b"vlan 2\n")
+tn.write(b"name VLAN_2\n")
+tn.write(b"vlan 3\n")
+tn.write(b"name VLAN_3\n")
+tn.write(b"vlan 4\n")
+tn.write(b"name VLAN_4\n")
+tn.write(b"vlan 5\n")
+tn.write(b"name VLAN_5\n")
+tn.write(b"end\n")
+tn.write(b"show vlan brief\n")
+tn.write(b"exit\n")
+print(tn.read_all().decode('ascii'))
+
+######################### netmiko1.py ######################################
+
+from netmiko import ConnectHandler
+
+r1 = {
+    'device_type': 'cisco_ios',
+    'ip': '192.168.122.254',
+    'username': 'cisco',
+    'password': 'cisco'
+}
+
+net_connect = ConnectHandler(**r1)
+output = net_connect.send_command('show ip int brief')
+print (output)
+
+config_commands = ['int loop 4', 'ip address 4.4.4.4 255.255.255.0']
+output = net_connect.send_config_set(config_commands)
+print (output)
+
+output = net_connect.send_command('show ip int brief')
+print (output)
+
+
+######################### netmiko2.py ######################################
+from netmiko import ConnectHandler
+
+s1 = {
+    'device_type': 'cisco_ios',
+    'ip': '192.168.122.250',
+    'username': 'cisco',
+    'password': 'cisco'
+}
+
+s2 = {
+    'device_type': 'cisco_ios',
+    'ip': '192.168.122.251',
+    'username': 'cisco',
+    'password': 'cisco'
+}
+
+all_devices = [s1, s2]
+
+for devices in all_devices:
+    net_connect = ConnectHandler(**devices)
+    for n in range (2,15):
+       print ("Tworzenie VLAN " + str(n))
+       config_commands = ['vlan ' + str(n), 'name Python_VLAN ' + str(n)]
+       output = net_connect.send_config_set(config_commands)
+       print (output)
