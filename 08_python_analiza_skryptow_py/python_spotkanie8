@@ -1,0 +1,69 @@
+########################
+
+
+from netmiko import ConnectHandler
+
+r1 = {
+    'device_type': 'cisco_ios',
+    'ip': '192.168.122.254',
+    'username': 'cisco',
+    'password': 'cisco'
+}
+
+net_connect = ConnectHandler(**r1)
+output = net_connect.send_command('show version')
+output2 = (output.find("IOSv"))
+
+if output2 > 0:
+    iosv = True
+else:
+    iosv = False
+
+if iosv:
+    print("Tak to jest urzadzenie z oprogramowaniem IOSv")
+else:
+    print("Nie, to nie jest urzadzenie z oprogramowaniem IOSv")
+
+
+
+########################
+
+
+from netmiko import ConnectHandler
+
+r1 = {
+    'device_type': 'cisco_ios',
+    'ip': '192.168.122.254',
+    'username': 'cisco',
+    'password': 'cisco'
+}
+
+s1 = {
+    'device_type': 'cisco_ios',
+    'ip': '192.168.122.250',
+    'username': 'cisco',
+    'password': 'cisco'
+}
+
+s2 = {
+    'device_type': 'cisco_ios',
+    'ip': '192.168.122.251',
+    'username': 'cisco',
+    'password': 'cisco'
+}
+
+all_devices = [r1, s1, s2]
+
+for device in all_devices:
+    net_connect = ConnectHandler(**device)
+    output = net_connect.send_command('show version')
+    outputl3 = (output.find("vios-"))
+    outputl2 = (output.find("vios_l2-"))
+    adres = (device['ip'])
+    
+    if outputl3 > 0:
+        print ("Urzadzenie do ktorego sie podlaczyles o adresie IP ", adres, ", to ruter IOSv")
+    elif outputl2 > 0:
+        print ("Urzadzenie do ktorego sie podlaczyles o adresie IP ", adres, ", to przelacznik IOSv")
+    else:
+        print ("Urzadzenie do ktorego sie podlaczyles o adresie IP ", adres, ", to urzadzenie nieznane")
