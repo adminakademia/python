@@ -1,0 +1,90 @@
+import requests
+import json
+
+wywolanie = requests.get('https://jsonplaceholder.typicode.com/posts/1')
+
+if (wywolanie.status_code != requests.codes.ok):
+    print('Niestety jest problem z wykonaniem zadania')
+else:
+    print(wywolanie.json())
+
+
+################################################
+
+
+import requests
+import json
+
+wywolanie = requests.get('https://jsonplaceholder.typicode.com/posts/1')
+
+if (wywolanie.status_code != requests.codes.ok):
+    print('Niestety jest problem z wykonaniem zadania')
+else:
+    print(wywolanie.json())
+
+
+
+tresc_post = {
+    'title' : 'jakis tytul',
+    'body' : 'jakas tresc',
+    'userId' : 1
+}
+
+
+wysylka = requests.post('https://jsonplaceholder.typicode.com/posts', json=tresc_post)
+
+if (wysylka.status_code != requests.codes.created):
+    print('Niestety jest problem z wykonaniem zadania')
+else:
+    print(wysylka.json())
+
+
+################################################
+
+
+import requests
+import json
+
+
+wywolanie = requests.get('https://urlhaus-api.abuse.ch/v1/urls/recent/')
+
+if (wywolanie.status_code != requests.codes.ok):
+    print('Niestety jest problem z wykonaniem zadania')
+else:
+    print(wywolanie.json())
+
+
+
+################################################
+
+import requests
+import json
+import pprint
+
+wywolanie = requests.get('https://urlhaus-api.abuse.ch/v1/urls/recent/')
+
+if (wywolanie.status_code != requests.codes.ok):
+    print('Niestety jest problem z wykonaniem zadania')
+else:
+    dane = wywolanie.json()
+    pprint.pprint(dane)
+
+
+################################################
+
+import requests
+import json
+import pprint
+
+wywolanie = requests.get('https://urlhaus-api.abuse.ch/v1/urls/recent/')
+
+if (wywolanie.status_code != requests.codes.ok):
+    print('Niestety jest problem z wykonaniem zadania')
+else:
+    dane = wywolanie.json()
+    urls = dane['urls']
+    print(urls)
+    identyf = '175.107.0.130'
+    for klucz in urls:
+       if (klucz['host'] == identyf):
+         print('Adres znajduje sie na czarnej liście')
