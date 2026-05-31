@@ -1,0 +1,108 @@
+## Pobieranie informacji funkcją .facts:
+root@NetworkAutomation-1:~# mcedit pyntc_test1.py
+
+
+import json
+from pyntc import ntc_device as NTC
+csr1 = NTC(host='192.168.122.250', username='cisco', password='cisco', device_type='cisco_ios_ssh')
+csr1.open()
+
+print(json.dumps(csr1.facts, indent=3))
+
+csr1.close()
+
+
+root@NetworkAutomation-1:~# python3 pyntc_test1.py
+
+
+## Można tez pobierać z pliku:
+
+root@NetworkAutomation-1:~# mcedit .ntc.conf
+
+[cisco_ios_ssh:csr1]
+host: 192.168.122.250
+username: cisco
+password: cisco
+port: 22
+
+root@NetworkAutomation-1:~# mcedit pyntc_test1.py
+
+import json
+from pyntc import ntc_device_by_name as NTC
+csr1 = NTC('csr1')
+csr1.open()
+
+print(csr1.facts)
+print(json.dumps(csr1.facts, indent=3))
+
+csr1.close()
+
+
+
+
+## Wysyłanie poleceń funkcją .config_list:
+
+import json
+from pyntc import ntc_device as NTC
+csr1 = NTC(host='192.168.122.250', username='cisco', password='cisco', device_type='cisco_ios_ssh')
+csr1.open()
+
+print(json.dumps(csr1.facts, indent=3))
+
+csr1.config_list(['hostname s1nowy', 'vlan 10', 'name vlan_nowy'])
+
+csr1.close()
+
+#Można też czytelniej:
+
+csr1.config_list(['hostname s1nowy', 
+				  'vlan 10', 
+				  'name vlan_nowy'])
+
+
+
+###
+
+# Pobranie wyniku 'show running-config':
+
+import json
+from pyntc import ntc_device as NTC
+csr1 = NTC(host='192.168.122.250', username='cisco', password='cisco', device_type='cisco_ios_ssh')
+csr1.open()
+
+ios_run = csr1.running_config
+print (ios_run)
+
+csr1.close()
+
+
+
+###
+
+#
+
+
+import json
+from pyntc import ntc_device as NTC
+csr1 = NTC(host='192.168.122.250', username='cisco', password='cisco', device_type='cisco_ios_ssh')
+csr1.open()
+
+ios_run = csr1.running_config
+
+HOST = '192.168.122.250'
+saveoutput = open('switch' + HOST, 'w')
+saveoutput.write(ios_run)
+saveoutput.close
+
+
+###
+#Kopia zapasowa z konfiguracji urządzenia:
+
+import json
+from pyntc import ntc_device as NTC
+csr1 = NTC(host='192.168.122.250', username='cisco', password='cisco', device_type='cisco_ios_ssh')
+csr1.open()
+
+ios_run = csr1.backup_running_config('switch-1.cfg')
+
+csr1.close()
